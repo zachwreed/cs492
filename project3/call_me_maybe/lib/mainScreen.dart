@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // Import Tab pages
 import 'components/business_card.dart';
 import 'components/predictor.dart';
+import 'components/resume.dart';
 
 class MainTabs extends StatelessWidget {
   final String title;
@@ -30,7 +31,7 @@ class MainTabs extends StatelessWidget {
         body: TabBarView(
           children: [
             BusinessCard(),
-            Icon(Icons.note),
+            Resume(),
             Predictor(),
           ],
         ),
