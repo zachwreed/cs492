@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 // Import Tab pages
-import 'components/business_card.dart';
-import 'components/predictor.dart';
-import 'components/resume.dart';
+import '../components/businessCard.dart';
+import '../components/predictor.dart';
+import '../components/resume.dart';
 
 class MainTabs extends StatelessWidget {
   final String title;
@@ -18,7 +18,7 @@ class MainTabs extends StatelessWidget {
       length: 3,
       initialIndex: 1,
       child: Scaffold(
-        backgroundColor: Color.fromARGB(230, 233, 234, 233),
+        backgroundColor: Color.fromARGB(250, 233, 234, 233),
         appBar: AppBar(
             title: Center(child: Text(title, textAlign: TextAlign.center)),
             bottom: TabBar(

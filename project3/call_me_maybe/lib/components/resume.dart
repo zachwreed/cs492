@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/resumeRow.dart';
 
 class Resume extends StatelessWidget {
-  List<ResumeRow> resumes = [
+  final List<ResumeRow> resumes = [
     ResumeRow(
         position: "Junior Software Developer",
         dateRange: "2019-present",
@@ -76,13 +76,10 @@ class Resume extends StatelessWidget {
     )
   ];
 
-  List<Widget> resumesList = [];
-
+  // Create resume row widgets
   @override
   Widget build(BuildContext context) {
-    resumes.forEach((resume) {
-      resumesList.add(resumeRowWidget(resume));
-    });
+    List<Widget> resumesList = resumeRowList(resumes);
 
     return FractionallySizedBox(
       widthFactor: 0.8,
@@ -95,6 +92,17 @@ class Resume extends StatelessWidget {
     );
   }
 
+  // Creates a widget list from a resume list
+  List<Widget> resumeRowList(List<ResumeRow> resumes) {
+    List<Widget> resumesList = [];
+    resumes.forEach((resume) {
+      resumesList.add(resumeRowWidget(resume));
+    });
+
+    return resumesList;
+  }
+
+  // Takes resume and returns a widget of the resume values
   Widget resumeRowWidget(ResumeRow resume) {
     return Container(
       alignment: Alignment.centerLeft,
@@ -102,6 +110,7 @@ class Resume extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Divider(),
+          // Position title
           Text(resume.position,
               style: TextStyle(fontFamily: 'Rowdies-Light', fontSize: 20.0)),
           // Company, Time at Company, Company Location
@@ -131,6 +140,7 @@ class Resume extends StatelessWidget {
               ],
             ),
           ),
+          // Position details
           Container(
             padding: EdgeInsets.only(top: 7),
             child: Text(resume.details),

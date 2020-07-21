@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import '../models/magic8ball.dart';
 
 class Predictor extends StatefulWidget {
-  final List<String> m8bValues = [
-    "Unlikely but possible",
-    "The future is uncertain",
-    "Maybe... We'll see",
-    "Yes, for sure",
-    "Without a doubt",
-    "There's a strong possibility"
-  ];
-  final Random random = Random();
+  Magic8Ball magic8ball = Magic8Ball();
 
   @override
   State createState() => _PredictorState();
@@ -18,8 +10,7 @@ class Predictor extends StatefulWidget {
 
 class _PredictorState extends State<Predictor> {
   Widget build(BuildContext context) {
-    final int m8bSize = widget.m8bValues.length;
-    String mb8Answer = widget.m8bValues[widget.random.nextInt(m8bSize)];
+    String mb8Answer = widget.magic8ball.shake();
 
     return FractionallySizedBox(
       widthFactor: 0.8,
@@ -37,8 +28,7 @@ class _PredictorState extends State<Predictor> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    mb8Answer =
-                        widget.m8bValues[widget.random.nextInt(m8bSize)];
+                    mb8Answer = widget.magic8ball.shake();
                   });
                 },
                 child: Text("Ask a question...Tap for answer",

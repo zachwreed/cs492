@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'mainScreen.dart';
+import './screens/mainScreen.dart';
 
 // Stateless widget is an abstract class
 class MyApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     // MaterialApp provides necessary padding for the app area
     return MaterialApp(
       title: 'Week 6',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.cyan),
       home: MainTabs(title: title),
     );
   }
