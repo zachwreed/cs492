@@ -5,7 +5,7 @@ class Resume extends StatelessWidget {
   final List<ResumeRow> resumes = [
     ResumeRow(
         position: "Junior Software Developer",
-        dateRange: "2019-present",
+        dateRange: "2019-Present",
         company: "Rough Country",
         location: "Dyersburg, TN",
         details:

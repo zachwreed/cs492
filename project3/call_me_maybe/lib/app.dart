@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     // MaterialApp provides necessary padding for the app area
     return MaterialApp(
       title: 'Week 6',
-      theme: ThemeData(primarySwatch: Colors.cyan),
+      theme: ThemeData(primarySwatch: Colors.lightBlue),
       home: MainTabs(title: title),
     );
   }
