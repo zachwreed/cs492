@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:journal/main.dart';
 
 class JournalDrawer extends StatelessWidget {
   @override
@@ -33,6 +34,12 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
 
   @override
   Widget build(BuildContext context) {
+    if (darkMode) {
+      brightness = Brightness.dark;
+    } else {
+      brightness = Brightness.light;
+    }
+
     return SwitchListTile(
       title: Text("Dark Mode"),
       onChanged: (bool value) {
