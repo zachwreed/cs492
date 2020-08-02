@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/journal_entry.dart';
 
@@ -5,9 +6,8 @@ class DatabaseManager {
   // hide public constructor to control number of instances.
   // expose 1 static getInstance value
   static DatabaseManager _instance;
-  static const String DATABASE_FILENAME = 'journal.db';
-  static const String SQL_CREATE_SCHEMA =
-      'CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, body TEXT, rating INTEGER)';
+  static const String DATABASE_FILENAME = 'journal.sqlite3.db';
+  static const String SCHEMA_FILENAME = 'assets/schema_1.sql.txt';
   static const String SQL_INSERT_ENTRY =
       'INSERT INTO journal_entries(title, body, rating, date) VALUES (?, ?, ?, ?)';
   static const String SQL_GET_ENTRIES = 'SELECT * FROM journal_entries';
@@ -28,7 +28,11 @@ class DatabaseManager {
   static Future initialize() async {
     final db = await openDatabase(DATABASE_FILENAME, version: 1,
         onCreate: (Database db, int version) async {
-      createTables(db, SQL_CREATE_SCHEMA);
+      // Open file and read create statement to string
+      final String createSchema = await rootBundle.loadString(SCHEMA_FILENAME);
+
+      // Seed database with schema
+      createTables(db, createSchema);
     });
     _instance = DatabaseManager._(database: db);
   }
