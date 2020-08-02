@@ -3,6 +3,7 @@ import '../components/journal_drawer.dart';
 import '../db/database_manager.dart';
 import '../models/journal_entry.dart';
 
+// Route used for Journal Entry Form from FAB
 class JournalEntryFormPage extends StatelessWidget {
   static const routeName = '/form';
   final void Function() updateBrightness;
@@ -23,6 +24,7 @@ class JournalEntryFormPage extends StatelessWidget {
   }
 }
 
+// Stateful implmentation of Journal Form
 class JournalEntryForm extends StatefulWidget {
   @override
   _JournalEntryFormState createState() => _JournalEntryFormState();

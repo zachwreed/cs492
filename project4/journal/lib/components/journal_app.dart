@@ -14,6 +14,7 @@ class _JournalAppState extends State<JournalApp> {
   final prefTheme = SharedPreferenceTheme();
   bool darkMode;
 
+  // Sets initial state of darkMode bool
   @override
   void initState() {
     super.initState();
@@ -22,6 +23,7 @@ class _JournalAppState extends State<JournalApp> {
     });
   }
 
+  // Function to pass to child routes for rebuilding on theme change
   void updateBrightness() {
     setState(() {
       darkMode = prefTheme.getDarkMode();
@@ -32,6 +34,7 @@ class _JournalAppState extends State<JournalApp> {
   Widget build(BuildContext context) {
     Brightness brightness;
 
+    // Set brightness based on darkMode
     if (darkMode) {
       brightness = Brightness.dark;
     } else {
@@ -43,6 +46,7 @@ class _JournalAppState extends State<JournalApp> {
       theme: ThemeData(
         brightness: brightness,
       ),
+      // Routes instantiated here due to the need to pass the updateBrightness function.
       routes: {
         JournalEntriesPage.routeName: (context) =>
             JournalEntriesPage(updateBrightness: updateBrightness),

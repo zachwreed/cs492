@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Creates instance of shared preference to interact with theme
 class SharedPreferenceTheme {
   static const String DARK_MODE = 'darkMode';
   static SharedPreferences _preferences;

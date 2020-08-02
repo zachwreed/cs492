@@ -24,6 +24,7 @@ class DatabaseManager {
     return _instance;
   }
 
+  // Make sure to call before other dbm calls
   static Future initialize() async {
     final db = await openDatabase(DATABASE_FILENAME, version: 1,
         onCreate: (Database db, int version) async {
@@ -32,10 +33,12 @@ class DatabaseManager {
     _instance = DatabaseManager._(database: db);
   }
 
+  // Creates tables in db
   static void createTables(Database db, String sql) async {
     await db.execute(sql);
   }
 
+  // Saves journal entry to db
   void saveJournalEntry(JournalEntry entry) {
     db.transaction((txn) async {
       await txn.rawInsert(SQL_INSERT_ENTRY,
@@ -43,6 +46,7 @@ class DatabaseManager {
     });
   }
 
+  // Gets journal entries map and returns mapped entries object
   Future<List<JournalEntry>> getJournalEntries() async {
     final journalRecords = await db.rawQuery(SQL_GET_ENTRIES);
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../shared_preferences/shared_preferences.dart';
 
+// Implements drawer used in route Scaffold
 class JournalDrawer extends StatelessWidget {
   final void Function() updateBrightness;
 
@@ -24,6 +25,7 @@ class JournalDrawer extends StatelessWidget {
   }
 }
 
+// SwitchListTile must be wrapped in a stateful widget
 class ThemeSwitch extends StatefulWidget {
   final void Function() updateBrightness;
 
@@ -42,6 +44,7 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
     return SwitchListTile(
       title: Text("Dark Mode"),
       onChanged: (bool value) {
+        // updates shared_preferences key value and calls for rebuild of MaterialApp widget
         setState(() {
           prefTheme.setDarkMode(value);
           widget.updateBrightness();
