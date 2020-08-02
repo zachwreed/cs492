@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../components/journal_drawer.dart';
-import 'package:sqflite/sqflite.dart';
+import '../db/database_manager.dart';
+import '../models/journal_entry.dart';
 
 class JournalEntryFormPage extends StatelessWidget {
   static const routeName = '/form';
+  final void Function() updateBrightness;
+
+  JournalEntryFormPage({this.updateBrightness});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class JournalEntryFormPage extends StatelessWidget {
         title: Text("Add New Entry"),
       ),
       body: JournalEntryForm(),
-      endDrawer: JournalDrawer(),
+      endDrawer: JournalDrawer(updateBrightness: updateBrightness),
     );
   }
 }
@@ -139,22 +142,17 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
                       // Looks through all form fields and saves value
                       formKey.currentState.save();
 
-                      // Delete database for development
-                      // await deleteDatabase('journal.db');
-                      var db = await openDatabase('journal.db', version: 1,
-                          onCreate: (Database db, int version) async {
-                        await db.execute(
-                            'CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, date DATE, title TEXT, body TEXT, rating INTEGER)');
-                      });
+                      final entry = JournalEntry(
+                          title: title,
+                          body: body,
+                          rating: rating,
+                          date: DateTime.now());
 
-                      await db.transaction((txn) async {
-                        await txn.rawInsert(
-                            'INSERT INTO journal_entries(title, body, rating, date) VALUES (?, ?, ?, CURRENT_DATE)',
-                            [title, body, rating]);
-                      });
+                      final dbm = DatabaseManager.getInstance();
 
-                      await db.close();
-                      Navigator.of(context).pop();
+                      dbm.saveJournalEntry(entry);
+
+                      Navigator.of(context).pop(true);
                     }
                   },
                   child: Text('Save Entry'),

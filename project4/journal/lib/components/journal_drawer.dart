@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:journal/main.dart';
+import '../shared_preferences/shared_preferences.dart';
 
 class JournalDrawer extends StatelessWidget {
+  final void Function() updateBrightness;
+
+  JournalDrawer({this.updateBrightness});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -13,7 +17,7 @@ class JournalDrawer extends StatelessWidget {
               child: Text("Settings", style: TextStyle(fontSize: 20)),
             ),
           ),
-          ThemeSwitch(),
+          ThemeSwitch(updateBrightness: updateBrightness),
         ],
       ),
     );
@@ -21,30 +25,26 @@ class JournalDrawer extends StatelessWidget {
 }
 
 class ThemeSwitch extends StatefulWidget {
-  const ThemeSwitch({
-    Key key,
-  }) : super(key: key);
+  final void Function() updateBrightness;
+
+  const ThemeSwitch({Key key, this.updateBrightness}) : super(key: key);
 
   @override
   _ThemeSwitchState createState() => _ThemeSwitchState();
 }
 
 class _ThemeSwitchState extends State<ThemeSwitch> {
-  bool darkMode = false;
-
+  final prefTheme = SharedPreferenceTheme();
   @override
   Widget build(BuildContext context) {
-    if (darkMode) {
-      brightness = Brightness.dark;
-    } else {
-      brightness = Brightness.light;
-    }
+    bool darkMode = prefTheme.getDarkMode();
 
     return SwitchListTile(
       title: Text("Dark Mode"),
       onChanged: (bool value) {
         setState(() {
-          darkMode = value;
+          prefTheme.setDarkMode(value);
+          widget.updateBrightness();
         });
       },
       value: darkMode,
