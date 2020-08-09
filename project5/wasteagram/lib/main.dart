@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wasteagram/widgets/app.dart';
 
 void main() {
-  runApp(FireStoreApp());
+  runApp(WasteagramApp());
 }
 
 class FireStoreApp extends StatelessWidget {
@@ -29,15 +30,18 @@ class FireStoreStreamBuilder extends StatelessWidget {
     return StreamBuilder(
       stream: Firestore.instance.collection('bandnames').snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.hasData &&
+            snapshot.data.documents != null &&
+            snapshot.data.documents.length > 0) {
+          return ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) {
+              return _buildListItem(context, snapshot.data.documents[index]);
+            },
+          );
+        } else {
           return Text('Loading...');
         }
-        return ListView.builder(
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) {
-            return _buildListItem(context, snapshot.data.documents[index]);
-          },
-        );
       },
     );
   }
