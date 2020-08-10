@@ -28,21 +28,25 @@ class ListScreen extends StatelessWidget {
 }
 
 class ListEntries extends StatelessWidget {
-  final posts = PostCollection();
+  final postCollection = PostCollection(documents: []);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream:
-          Firestore.instance.collection(posts.getCollectionName()).snapshots(),
+      stream: Firestore.instance
+          .collection(postCollection.getCollectionName())
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.data.documents != null &&
             snapshot.data.documents.length > 0) {
+          // create post objects from snapshot
+          postCollection.fillDocumentsFromSnapshot(snapshot);
+
           return ListView.builder(
-            itemCount: snapshot.data.documents.length,
+            itemCount: postCollection.documents.length,
             itemBuilder: (context, index) {
-              return _buildListItem(context, snapshot.data.documents[index]);
+              return _buildListItem(context, postCollection.documents[index]);
             },
           );
         } else {
@@ -52,19 +56,17 @@ class ListEntries extends StatelessWidget {
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+  Widget _buildListItem(BuildContext context, PostDocument post) {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Expanded(
-              child: Text(
-                  '${DateFormat.yMEd().format(document[posts.postDateKey].toDate())}')),
-          Text('${document[posts.wastedItemsKey]}')
+          Expanded(child: Text('${post.getFormattedDateString()}')),
+          Text('${post.wastedItems}')
         ],
       ),
       onTap: () {
         Navigator.of(context)
-            .pushNamed(DetailScreen.routeName, arguments: document);
+            .pushNamed(DetailScreen.routeName, arguments: post);
       },
     );
   }
