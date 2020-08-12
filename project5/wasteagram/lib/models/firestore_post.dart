@@ -6,6 +6,7 @@ class PostCollection {
   static const String collectionName = 'posts';
 
   List<PostDocument> documents;
+  int totalWastedItems;
 
   PostCollection({this.documents});
 
@@ -15,8 +16,21 @@ class PostCollection {
 
   void fillDocumentsFromSnapshot(AsyncSnapshot<dynamic> snapshot) {
     documents.clear();
+    totalWastedItems = 0;
+
     snapshot.data.documents.forEach((doc) {
-      documents.add(PostDocument.fromSnapshotDocument(doc));
+      final post = PostDocument.fromSnapshotDocument(doc);
+      totalWastedItems += post.wastedItems;
+      documents.add(post);
+    });
+  }
+
+  void sortDocumentsByDate() {
+    documents.sort((a, b) {
+      if (a.postDate.isBefore(b.postDate)) {
+        return 1;
+      }
+      return 0;
     });
   }
 }
@@ -26,7 +40,7 @@ class PostDocument {
   static String latitudeKey = 'latitude';
   static String longitudeKey = 'longitude';
   static String postDateKey = 'postDate';
-  static String wastedItemsKey = 'wastedItems';
+  static String wastedItemsKey = 'quantity'; // -------- refactor later
 
   final String imgUrl;
   final double latitude;

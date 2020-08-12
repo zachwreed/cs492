@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteagram/models/firestore_post.dart';
 
+// https://api.flutter.dev/flutter/widgets/Image/loadingBuilder.html
 class DetailScreen extends StatelessWidget {
   static const routeName = '/post';
 
@@ -32,7 +33,18 @@ class _DetailsWidgetState extends State<DetailsWidget> {
   Image image;
 
   void getImage() {
-    image = Image.network(widget.post.imgUrl);
+    image = Image.network(widget.post.imgUrl, loadingBuilder:
+        (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+      if (loadingProgress == null) return child;
+      return Center(
+        child: CircularProgressIndicator(
+          value: loadingProgress.expectedTotalBytes != null
+              ? loadingProgress.cumulativeBytesLoaded /
+                  loadingProgress.expectedTotalBytes
+              : null,
+        ),
+      );
+    });
   }
 
   @override
@@ -44,25 +56,23 @@ class _DetailsWidgetState extends State<DetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
       child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              image,
-              SizedBox(height: 40),
-              Text(
-                'Items ${widget.post.wastedItems}',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Location (${widget.post.latitude}, ${widget.post.longitude})',
-                style: TextStyle(fontSize: 15),
-              )
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            image,
+            SizedBox(height: 40),
+            Text(
+              'Items ${widget.post.wastedItems}',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 80),
+            Text(
+              'Location (${widget.post.latitude}, ${widget.post.longitude})',
+              style: TextStyle(fontSize: 15),
+            )
+          ],
         ),
       ),
     );
