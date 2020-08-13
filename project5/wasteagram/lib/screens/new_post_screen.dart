@@ -31,7 +31,7 @@ class _NewPostFormState extends State<NewPostForm> {
   LocationData locationData;
   var locationService = Location();
   File image;
-  int wastedItems;
+  int quantity;
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
 
@@ -72,7 +72,7 @@ class _NewPostFormState extends State<NewPostForm> {
     }
 
     PostDocument post = PostDocument(url, locationData.latitude,
-        locationData.longitude, timestamp, wastedItems);
+        locationData.longitude, quantity, timestamp);
 
     // upload new post document
     post.upload();
@@ -137,7 +137,7 @@ class _NewPostFormState extends State<NewPostForm> {
                       }
                     },
                     onSaved: (value) {
-                      wastedItems = int.parse(value);
+                      quantity = int.parse(value);
                     },
                   ),
                 ),
@@ -145,21 +145,26 @@ class _NewPostFormState extends State<NewPostForm> {
                 ButtonTheme(
                   minWidth: 150.0,
                   height: 150.0,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Icon(
-                      Icons.cloud_upload,
-                      size: 90,
-                    ),
-                    onPressed: () {
-                      if (formKey.currentState.validate()) {
-                        formKey.currentState.save();
+                  child: Semantics(
+                    button: true,
+                    enabled: true,
+                    onTapHint: 'Upload post',
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100)),
+                      child: Icon(
+                        Icons.cloud_upload,
+                        size: 90,
+                      ),
+                      onPressed: () {
+                        if (formKey.currentState.validate()) {
+                          formKey.currentState.save();
 
-                        _uploadImageAndDocument();
-                        Navigator.of(context).pop(true);
-                      }
-                    },
+                          _uploadImageAndDocument();
+                          Navigator.of(context).pop(true);
+                        }
+                      },
+                    ),
                   ),
                 )
               ],

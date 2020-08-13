@@ -12,11 +12,11 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  int wastedItems;
+  int quantity;
 
-  void updateWastedItems(int wastedItemsIn) {
+  void updatequantity(int quantityIn) {
     setState(() {
-      wastedItems = wastedItemsIn;
+      quantity = quantityIn;
     });
     print("in parent");
   }
@@ -25,10 +25,10 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     Text text;
 
-    if (wastedItems == null) {
+    if (quantity == null) {
       text = Text("Wasted Items");
     } else {
-      text = Text("Wasted Items: ${wastedItems}");
+      text = Text("Wasted Items: ${quantity}");
     }
 
     return Scaffold(
@@ -37,12 +37,21 @@ class _ListScreenState extends State<ListScreen> {
         centerTitle: true,
         title: text,
       ),
-      body: ListEntries(updateWastedItems: updateWastedItems),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
-        },
-        child: Icon(Icons.camera),
+      body: ListEntries(updatequantity: updatequantity),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Semantics(
+        button: true,
+        enabled: true,
+        onTapHint: 'Select an image',
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
+            },
+            child: Icon(Icons.camera),
+          ),
+        ),
       ),
     );
   }
@@ -50,9 +59,9 @@ class _ListScreenState extends State<ListScreen> {
 
 class ListEntries extends StatelessWidget {
   final postCollection = PostCollection(documents: []);
-  final void Function(int) updateWastedItems;
+  final void Function(int) updatequantity;
 
-  ListEntries({this.updateWastedItems});
+  ListEntries({this.updatequantity});
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +74,14 @@ class ListEntries extends StatelessWidget {
             snapshot.data.documents != null &&
             snapshot.data.documents.length > 0) {
           // create post objects from snapshot and sort them by newest
+          print(snapshot.data.documents[0]);
           postCollection.fillDocumentsFromSnapshot(snapshot);
           postCollection.sortDocumentsByDate();
 
-          if (postCollection.totalWastedItems > 0) {
-            print("total: ${postCollection.totalWastedItems}");
+          if (postCollection.totalQuantity > 0) {
+            print("total: ${postCollection.totalQuantity}");
             () async {
-              updateWastedItems(postCollection.totalWastedItems);
+              updatequantity(postCollection.totalQuantity);
             }();
           }
 
@@ -93,7 +103,7 @@ class ListEntries extends StatelessWidget {
       title: Row(
         children: <Widget>[
           Expanded(child: Text('${post.getFormattedDateString()}')),
-          Text('${post.wastedItems}')
+          Text('${post.quantity}')
         ],
       ),
       onTap: () {

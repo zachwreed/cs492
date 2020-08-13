@@ -6,7 +6,7 @@ class PostCollection {
   static const String collectionName = 'posts';
 
   List<PostDocument> documents;
-  int totalWastedItems;
+  int totalQuantity;
 
   PostCollection({this.documents});
 
@@ -16,18 +16,18 @@ class PostCollection {
 
   void fillDocumentsFromSnapshot(AsyncSnapshot<dynamic> snapshot) {
     documents.clear();
-    totalWastedItems = 0;
+    totalQuantity = 0;
 
     snapshot.data.documents.forEach((doc) {
       final post = PostDocument.fromSnapshotDocument(doc);
-      totalWastedItems += post.wastedItems;
+      totalQuantity += post.quantity;
       documents.add(post);
     });
   }
 
   void sortDocumentsByDate() {
     documents.sort((a, b) {
-      if (a.postDate.isBefore(b.postDate)) {
+      if (a.date.isBefore(b.date)) {
         return 1;
       }
       return 0;
@@ -39,27 +39,27 @@ class PostDocument {
   static String imgUrlKey = 'imgURL';
   static String latitudeKey = 'latitude';
   static String longitudeKey = 'longitude';
-  static String postDateKey = 'postDate';
-  static String wastedItemsKey = 'quantity'; // -------- refactor later
+  static String dateKey = 'date';
+  static String quantityKey = 'quantity';
 
   final String imgUrl;
   final double latitude;
   final double longitude;
-  final DateTime postDate;
-  final int wastedItems;
+  final DateTime date;
+  final int quantity;
 
-  PostDocument(this.imgUrl, this.latitude, this.longitude, this.postDate,
-      this.wastedItems);
+  PostDocument(
+      this.imgUrl, this.latitude, this.longitude, this.quantity, this.date);
 
   PostDocument.fromSnapshotDocument(DocumentSnapshot document)
       : this.imgUrl = document[imgUrlKey],
         this.latitude = document[latitudeKey],
         this.longitude = document[longitudeKey],
-        this.postDate = document[postDateKey].toDate(),
-        this.wastedItems = document[wastedItemsKey];
+        this.quantity = document[quantityKey],
+        this.date = document[dateKey].toDate();
 
   String getFormattedDateString() {
-    return DateFormat.yMEd().format(this.postDate).toString();
+    return DateFormat.yMEd().format(this.date).toString();
   }
 
   void upload() async {
@@ -67,8 +67,8 @@ class PostDocument {
       imgUrlKey: imgUrl,
       latitudeKey: latitude,
       longitudeKey: longitude,
-      postDateKey: Timestamp.fromDate(postDate),
-      wastedItemsKey: wastedItems,
+      dateKey: Timestamp.fromDate(date),
+      quantityKey: quantity,
     });
   }
 }

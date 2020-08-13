@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteagram/models/firestore_post.dart';
 
@@ -13,7 +12,7 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('${post.getFormattedDateString()}'),
+        title: Text('Wasteagram Post'),
       ),
       body: DetailsWidget(post),
     );
@@ -61,10 +60,15 @@ class _DetailsWidgetState extends State<DetailsWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              '${widget.post.getFormattedDateString()}',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
             image,
             SizedBox(height: 40),
             Text(
-              'Items ${widget.post.wastedItems}',
+              'Items ${widget.post.quantity}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 80),
