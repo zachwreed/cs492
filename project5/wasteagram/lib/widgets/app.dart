@@ -24,10 +24,10 @@ class WasteagramApp extends StatelessWidget {
 
   static Future<void> reportError(
       dynamic error, dynamic stackTrace, String sentryURL) async {
-    // if (Foundation.kDebugMode) {
-    //   print(stackTrace);
-    //   return;
-    // }
+    if (Foundation.kDebugMode) {
+      print(stackTrace);
+      return;
+    }
 
     final SentryClient sentry = SentryClient(dsn: sentryURL);
     final SentryResponse response = await sentry.captureException(

@@ -15,10 +15,11 @@ class _ListScreenState extends State<ListScreen> {
   int quantity;
 
   void updatequantity(int quantityIn) {
-    setState(() {
-      quantity = quantityIn;
-    });
-    print("in parent");
+    if (quantityIn != quantity) {
+      setState(() {
+        quantity = quantityIn;
+      });
+    }
   }
 
   @override
@@ -48,7 +49,7 @@ class _ListScreenState extends State<ListScreen> {
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
-            },
+            },fast
             child: Icon(Icons.camera),
           ),
         ),
@@ -80,7 +81,7 @@ class ListEntries extends StatelessWidget {
 
           if (postCollection.totalQuantity > 0) {
             print("total: ${postCollection.totalQuantity}");
-            () async {
+            () {
               updatequantity(postCollection.totalQuantity);
             }();
           }
