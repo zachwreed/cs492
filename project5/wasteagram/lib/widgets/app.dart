@@ -4,13 +4,12 @@ import 'package:wasteagram/screens/list_screen.dart';
 import 'package:wasteagram/screens/new_post_screen.dart';
 import 'package:flutter/foundation.dart' as Foundation;
 import 'package:sentry/sentry.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class WasteagramApp extends StatelessWidget {
-  static final routes = {
-    DetailScreen.routeName: (context) => DetailScreen(),
-    ListScreen.routeName: (context) => ListScreen(),
-    NewPostFormScreen.routeName: (context) => NewPostFormScreen(),
-  };
+  StreamingSharedPreferences preferences;
+
+  WasteagramApp(this.preferences);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,11 @@ class WasteagramApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wasteagram',
       theme: ThemeData.dark(),
-      routes: routes,
+      routes: {
+        DetailScreen.routeName: (context) => DetailScreen(),
+        ListScreen.routeName: (context) => ListScreen(preferences),
+        NewPostFormScreen.routeName: (context) => NewPostFormScreen(),
+      },
     );
   }
 

@@ -5,23 +5,20 @@ import 'package:wasteagram/models/firestore_post.dart';
 import 'package:wasteagram/screens/detail_screen.dart';
 
 class ListPosts extends StatefulWidget {
+  StreamingSharedPreferences preferences;
+
+  ListPosts(this.preferences);
+
   @override
   _ListPostsState createState() => _ListPostsState();
 }
 
 class _ListPostsState extends State<ListPosts> {
   final postCollection = PostCollection(documents: []);
-  StreamingSharedPreferences preferences;
 
   @override
   void initState() {
     super.initState();
-    getPreferences();
-  }
-
-  void getPreferences() async {
-    preferences = await StreamingSharedPreferences.instance;
-    setState(() {});
   }
 
   @override
@@ -39,7 +36,8 @@ class _ListPostsState extends State<ListPosts> {
           postCollection.sortDocumentsByDate();
 
           if (postCollection.totalQuantity > 0) {
-            preferences.setInt('totalQuantity', postCollection.totalQuantity);
+            widget.preferences
+                .setInt('totalQuantity', postCollection.totalQuantity);
           }
 
           return ListView.builder(
@@ -49,8 +47,8 @@ class _ListPostsState extends State<ListPosts> {
             },
           );
         } else {
-          if (preferences != null) {
-            preferences.setInt('totalQuantity', 0);
+          if (widget.preferences != null) {
+            widget.preferences.setInt('totalQuantity', 0);
           }
           return Center(child: CircularProgressIndicator());
         }
