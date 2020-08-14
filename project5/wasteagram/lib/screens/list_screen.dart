@@ -21,17 +21,11 @@ class ListScreen extends StatelessWidget {
         onTapHint: 'Select an image',
         child: Padding(
           padding: EdgeInsets.only(bottom: 10),
-          child: Semantics(
-            onTapHint: "Tap me",
-            onLongPressHint: 'Tap me too',
-            button: true,
-            enabled: true,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
-              },
-              child: Icon(Icons.camera),
-            ),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
+            },
+            child: Icon(Icons.camera),
           ),
         ),
       ),

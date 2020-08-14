@@ -8,7 +8,7 @@ class ListScreenTitle extends StatefulWidget {
 
 class _ListScreenTitleState extends State<ListScreenTitle> {
   StreamingSharedPreferences preferences;
-  int totalQuanity;
+  int totalQuanity = 0;
 
   @override
   void initState() {
@@ -18,6 +18,7 @@ class _ListScreenTitleState extends State<ListScreenTitle> {
 
   void getPreferences() async {
     preferences = await StreamingSharedPreferences.instance;
+    print("finish preferences");
     setState(() {});
   }
 
@@ -30,7 +31,7 @@ class _ListScreenTitleState extends State<ListScreenTitle> {
       totalQuanity = value;
       setState(() {});
     });
-
+    print("return Text()");
     if (totalQuanity == 0) {
       return Text('Wasted Items');
     }

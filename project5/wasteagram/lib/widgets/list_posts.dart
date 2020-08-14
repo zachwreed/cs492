@@ -35,11 +35,12 @@ class _ListPostsState extends State<ListPosts> {
             snapshot.data.documents != null &&
             snapshot.data.documents.length > 0) {
           // create post objects from snapshot and sort them by newest
-          print(snapshot.data.documents[0]);
           postCollection.fillDocumentsFromSnapshot(snapshot);
           postCollection.sortDocumentsByDate();
 
-          preferences.setInt('totalQuantity', postCollection.totalQuantity);
+          if (postCollection.totalQuantity > 0) {
+            preferences.setInt('totalQuantity', postCollection.totalQuantity);
+          }
 
           return ListView.builder(
             itemCount: postCollection.documents.length,
@@ -48,7 +49,9 @@ class _ListPostsState extends State<ListPosts> {
             },
           );
         } else {
-          preferences.setInt('totalQuantity', 0);
+          if (preferences != null) {
+            preferences.setInt('totalQuantity', 0);
+          }
           return Center(child: CircularProgressIndicator());
         }
       },
