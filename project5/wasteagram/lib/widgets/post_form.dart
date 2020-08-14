@@ -106,24 +106,28 @@ class _PostFormState extends State<PostForm> {
                 SizedBox(height: 40),
                 Form(
                   key: formKey,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Number of Wasted Items',
-                      border: OutlineInputBorder(),
+                  child: Semantics(
+                    enabled: true,
+                    onTapHint: "Enter number of wasted items",
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Number of Wasted Items',
+                        border: OutlineInputBorder(),
+                      ),
+                      textAlign: TextAlign.center,
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter a number';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onSaved: (value) {
+                        quantity = int.parse(value);
+                      },
                     ),
-                    textAlign: TextAlign.center,
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a number';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onSaved: (value) {
-                      quantity = int.parse(value);
-                    },
                   ),
                 ),
                 SizedBox(height: 40),

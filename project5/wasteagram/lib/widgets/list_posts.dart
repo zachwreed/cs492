@@ -57,24 +57,29 @@ class _ListPostsState extends State<ListPosts> {
   }
 
   Widget _buildListItem(BuildContext context, PostDocument post) {
-    return ListTile(
-      title: Row(
-        children: <Widget>[
-          Expanded(
-              child: Text(
-            '${post.getFormattedDateString()}',
-            style: TextStyle(fontSize: 20),
-          )),
-          Text(
-            '${post.quantity}',
-            style: TextStyle(fontSize: 22),
-          )
-        ],
+    return Semantics(
+      enabled: true,
+      onTapHint:
+          "Details for Post ${post.getFormattedDateString()}, ${post.quantity} wasted items",
+      child: ListTile(
+        title: Row(
+          children: <Widget>[
+            Expanded(
+                child: Text(
+              '${post.getFormattedDateString()}',
+              style: TextStyle(fontSize: 20),
+            )),
+            Text(
+              '${post.quantity}',
+              style: TextStyle(fontSize: 22),
+            )
+          ],
+        ),
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(DetailScreen.routeName, arguments: post);
+        },
       ),
-      onTap: () {
-        Navigator.of(context)
-            .pushNamed(DetailScreen.routeName, arguments: post);
-      },
     );
   }
 }
