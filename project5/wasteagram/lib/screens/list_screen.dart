@@ -3,42 +3,56 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasteagram/models/firestore_post.dart';
 import 'package:wasteagram/screens/detail_screen.dart';
 import 'package:wasteagram/screens/new_post_screen.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
-class ListScreen extends StatefulWidget {
-  static const routeName = '/';
-
+class ListScreenTitle extends StatefulWidget {
   @override
-  _ListScreenState createState() => _ListScreenState();
+  _ListScreenTitleState createState() => _ListScreenTitleState();
 }
 
-class _ListScreenState extends State<ListScreen> {
-  int quantity;
+class _ListScreenTitleState extends State<ListScreenTitle> {
+  StreamingSharedPreferences preferences;
+  int totalQuanity;
 
-  void updatequantity(int quantityIn) {
-    if (quantityIn != quantity) {
-      setState(() {
-        quantity = quantityIn;
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    getPreferences();
+  }
+
+  void getPreferences() async {
+    preferences = await StreamingSharedPreferences.instance;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    Text text;
+    Preference<int> quantity =
+        preferences.getInt('totalQuantity', defaultValue: 0);
 
-    if (quantity == null) {
-      text = Text("Wasted Items");
-    } else {
-      text = Text("Wasted Items: ${quantity}");
+    quantity.listen((value) {
+      totalQuanity = value;
+      setState(() {});
+    });
+
+    if (totalQuanity == 0) {
+      return Text('Wasted Items');
     }
+    return Text('Wasted Items: ${totalQuanity}');
+  }
+}
 
+class ListScreen extends StatelessWidget {
+  static const routeName = '/';
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: Icon(Icons.settings),
         centerTitle: true,
-        title: text,
+        title: ListScreenTitle(),
       ),
-      body: ListEntries(updatequantity: updatequantity),
+      body: ListEntries(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Semantics(
         button: true,
@@ -46,11 +60,18 @@ class _ListScreenState extends State<ListScreen> {
         onTapHint: 'Select an image',
         child: Padding(
           padding: EdgeInsets.only(bottom: 10),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
-            },fast
-            child: Icon(Icons.camera),
+          child: Semantics(
+            onTapHint: "Tap me",
+            onLongPressHint: 'Tap me too',
+            button: true,
+            onTap: () => print('Tapped'),
+            enabled: true,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(NewPostFormScreen.routeName);
+              },
+              child: Icon(Icons.camera),
+            ),
           ),
         ),
       ),
@@ -58,11 +79,25 @@ class _ListScreenState extends State<ListScreen> {
   }
 }
 
-class ListEntries extends StatelessWidget {
-  final postCollection = PostCollection(documents: []);
-  final void Function(int) updatequantity;
+class ListEntries extends StatefulWidget {
+  @override
+  _ListEntriesState createState() => _ListEntriesState();
+}
 
-  ListEntries({this.updatequantity});
+class _ListEntriesState extends State<ListEntries> {
+  final postCollection = PostCollection(documents: []);
+  StreamingSharedPreferences preferences;
+
+  @override
+  void initState() {
+    super.initState();
+    getPreferences();
+  }
+
+  void getPreferences() async {
+    preferences = await StreamingSharedPreferences.instance;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +115,7 @@ class ListEntries extends StatelessWidget {
           postCollection.sortDocumentsByDate();
 
           if (postCollection.totalQuantity > 0) {
-            print("total: ${postCollection.totalQuantity}");
-            () {
-              updatequantity(postCollection.totalQuantity);
-            }();
+            preferences.setInt('totalQuantity', postCollection.totalQuantity);
           }
 
           return ListView.builder(
