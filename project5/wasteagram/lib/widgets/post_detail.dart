@@ -50,12 +50,12 @@ class _PostDetailsState extends State<PostDetails> {
             image,
             SizedBox(height: 40),
             Text(
-              'Items ${widget.post.quantity}',
+              'Items: ${widget.post.quantity}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 80),
             Text(
-              'Location (${widget.post.latitude}, ${widget.post.longitude})',
+              'Location: (${widget.post.latitude}, ${widget.post.longitude})',
               style: TextStyle(fontSize: 15),
             )
           ],

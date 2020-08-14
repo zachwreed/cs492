@@ -60,8 +60,15 @@ class _ListPostsState extends State<ListPosts> {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Expanded(child: Text('${post.getFormattedDateString()}')),
-          Text('${post.quantity}')
+          Expanded(
+              child: Text(
+            '${post.getFormattedDateString()}',
+            style: TextStyle(fontSize: 20),
+          )),
+          Text(
+            '${post.quantity}',
+            style: TextStyle(fontSize: 22),
+          )
         ],
       ),
       onTap: () {
