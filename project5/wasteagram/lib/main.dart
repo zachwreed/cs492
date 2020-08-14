@@ -1,3 +1,16 @@
+// ************************************************
+// Author: Zachary Reed
+// Assignment: Project 5: Wasteagram
+// Date: 8/14/2020
+// References:
+// 1) Module Week 9 - Device Services & Sensors
+//    Author: Nauman Chaudhry
+//    Date Accessed: 8/14/2020
+// 2) Module Week 10 - Testing, Runtime Analytics & Performance
+//    Author: Nauman Chaudhry
+//    Date Accessed: 8/14/2020
+// ************************************************
+
 import 'package:flutter/material.dart';
 import 'package:wasteagram/widgets/app.dart';
 import 'package:flutter/foundation.dart' as Foundation;
